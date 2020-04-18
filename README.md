@@ -1,4 +1,4 @@
-# Library Template (ANDROID)
+# OAuth Github(ANDROID)
 
 This repository can be used as a template to create new GitHub repositories for Kotlin/Android libraries.
 
