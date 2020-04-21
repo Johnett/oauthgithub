@@ -1,9 +1,9 @@
-ext.module_name = "librarytemplatesample"
+ext.module_name = "oauthgithubsample"
 
 apply from: rootProject.file("gradle/android_application_config.gradle")
 
 dependencies {
-  implementation project(":library")
+  implementation project(":oauthgithub")
 
   implementation deps.androidx.app_compat
   implementation deps.androidx.constraint_layout

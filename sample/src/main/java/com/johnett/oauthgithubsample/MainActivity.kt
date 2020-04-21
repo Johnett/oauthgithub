@@ -1,5 +1,5 @@
 /**
- * Designed and developed by Aidan Follestad (@afollestad)
+ * Designed and developed by Johnett Mathew (@Johnett)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.afollestad.librarytemplatesample
+package com.johnett.oauthgithubsample
 
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.afollestad.librarytemplate.Greeter
+import com.johnett.oauthgithub.Greeter
 
 class MainActivity : AppCompatActivity() {
   private val inputView by lazy { findViewById<TextView>(R.id.inputView) }

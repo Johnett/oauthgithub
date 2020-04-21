@@ -1,5 +1,5 @@
 /**
- * Designed and developed by Aidan Follestad (@afollestad)
+ * Designed and developed by Johnett Mathew (@Johnett)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.afollestad.librarytemplate
+package com.johnett.oauthgithub
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting

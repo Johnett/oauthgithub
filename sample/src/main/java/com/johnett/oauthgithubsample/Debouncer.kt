@@ -1,5 +1,5 @@
 /**
- * Designed and developed by Aidan Follestad (@afollestad)
+ * Designed and developed by Johnett Mathew (@Johnett)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.afollestad.librarytemplatesample
+package com.johnett.oauthgithubsample
 
 import android.view.View
 
 internal object Debouncer {
-  @Volatile private var enabled: Boolean = true
+  @Volatile
+  private var enabled: Boolean = true
   private val enableAgain = Runnable { enabled = true }
 
   fun canPerform(view: View): Boolean {
