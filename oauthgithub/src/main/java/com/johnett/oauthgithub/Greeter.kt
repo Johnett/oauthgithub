@@ -18,7 +18,7 @@ package com.johnett.oauthgithub
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 
-/** @author Aidan Follestad (@afollestad) */
+/** @author Johnett Mathew (@Johnett) */
 class Greeter(
   @VisibleForTesting var context: Context?
 ) {
