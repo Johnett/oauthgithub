@@ -1,3 +1,18 @@
+/**
+ * Designed and developed by Johnett Mathew (@Johnett)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.johnett.oauthgithub
 
 import android.annotation.SuppressLint
@@ -10,12 +25,16 @@ import android.webkit.CookieManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
-import okhttp3.*
+import java.io.IOException
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import org.json.JSONException
 import org.json.JSONObject
-import java.io.IOException
-
 
 class AuthActivity : AppCompatActivity() {
 
@@ -31,9 +50,8 @@ class AuthActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_auth)
 
-
     scopeList = ArrayList()
-    scopeAppendToUrl = "";
+    scopeAppendToUrl = ""
 
     val intent: Intent = intent
 
@@ -42,15 +60,15 @@ class AuthActivity : AppCompatActivity() {
       PACKAGE = intent.getStringExtra("package")!!
       CLIENT_SECRET = intent.getStringExtra("secret")!!
       ACTIVITY_NAME = intent.getStringExtra("activity")!!
-      debug = intent.getBooleanExtra("debug", false);
-      isScopeDefined = intent.getBooleanExtra("isScopeDefined", false);
-      clearDataBeforeLaunch = intent.getBooleanExtra("clearData", false);
+      debug = intent.getBooleanExtra("debug", false)
+      isScopeDefined = intent.getBooleanExtra("isScopeDefined", false)
+      clearDataBeforeLaunch = intent.getBooleanExtra("clearData", false)
     } else {
-      Log.d(TAG, "intent extras null");
-      finish();
+      Log.d(TAG, "intent extras null")
+      finish()
     }
 
-    var urlLoad = "$GITHUB_URL?client_id=$CLIENT_ID";
+    var urlLoad = "$GITHUB_URL?client_id=$CLIENT_ID"
 
     if (isScopeDefined) {
       scopeList = intent.getStringArrayListExtra("scope_list")
@@ -60,12 +78,12 @@ class AuthActivity : AppCompatActivity() {
 
     if (debug) {
       Log.d(
-        TAG, "intent received is "
-            + "\n-client id: " + CLIENT_ID
-            + "\n-secret:" + CLIENT_SECRET
-            + "\n-activity: " + ACTIVITY_NAME
-            + "\n-Package: " + PACKAGE
-      );
+        TAG, "intent received is " +
+            "\n-client id: " + CLIENT_ID +
+            "\n-secret:" + CLIENT_SECRET +
+            "\n-activity: " + ACTIVITY_NAME +
+            "\n-Package: " + PACKAGE
+      )
       Log.d(TAG, "onCreate: Scope request are : $scopeAppendToUrl")
     }
 
@@ -79,72 +97,71 @@ class AuthActivity : AppCompatActivity() {
       return
     }
 
-    webView!!.settings.javaScriptEnabled = true;
+    webView!!.settings.javaScriptEnabled = true
     webView!!.webViewClient = object : WebViewClient() {
       override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
         try {
           if (url != null) {
             if (!url.contains("?code=")) return false
-          };
+          }
 
           CODE = url?.substring(url.lastIndexOf("?code=") + 1)!!
           val tokenCode: List<String> = CODE.split("=")
           val tokenFetchedIs: String = tokenCode[1]
-          val cleanToken: List<String> = tokenFetchedIs.split("&");
+          val cleanToken: List<String> = tokenFetchedIs.split("&")
 
-          fetchOauthTokenWithCode(cleanToken[0]);
+          fetchOauthTokenWithCode(cleanToken[0])
 
           if (debug) {
-            Log.d(TAG, "code fetched is: $CODE");
-            Log.d(TAG, "code token: " + tokenCode[1]);
-            Log.d(TAG, "token cleaned is: " + cleanToken[0]);
+            Log.d(TAG, "code fetched is: $CODE")
+            Log.d(TAG, "code token: " + tokenCode[1])
+            Log.d(TAG, "token cleaned is: " + cleanToken[0])
           }
         } catch (e: Exception) {
           e.printStackTrace()
         }
-        return false;
+        return false
       }
     }
-
 
     webView!!.loadUrl(urlLoad)
   }
 
   fun clearDataBeforeLaunch() {
-    val cookieManager: CookieManager = CookieManager.getInstance();
+    val cookieManager: CookieManager = CookieManager.getInstance()
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       cookieManager.removeAllCookies {
         // a callback which is executed when the cookies have been removed
         @Override
         fun onReceiveValue(aBoolean: Boolean) {
-          Log.d(TAG, "Cookie removed: $aBoolean");
+          Log.d(TAG, "Cookie removed: $aBoolean")
         }
-      };
+      }
     } else {
       //noinspection deprecation
-      cookieManager.removeAllCookie();
+      cookieManager.removeAllCookie()
     }
   }
 
   fun fetchOauthTokenWithCode(code: String) {
     val client = OkHttpClient()
     val url: HttpUrl.Builder = GITHUB_OAUTH.toHttpUrlOrNull()!!.newBuilder()
-    url.addQueryParameter("client_id", CLIENT_ID);
-    url.addQueryParameter("client_secret", CLIENT_SECRET);
-    url.addQueryParameter("code", code);
+    url.addQueryParameter("client_id", CLIENT_ID)
+    url.addQueryParameter("client_secret", CLIENT_SECRET)
+    url.addQueryParameter("code", code)
 
-    val urlOauth: String = url.build().toString();
+    val urlOauth: String = url.build().toString()
 
     val request: Request = Request.Builder()
       .header("Accept", "application/json")
       .url(urlOauth)
-      .build();
+      .build()
 
     client.newCall(request).enqueue(object : Callback {
       override fun onFailure(call: Call, e: IOException) {
         if (debug) {
-          Log.d(TAG, "IOException: " + e.message);
+          Log.d(TAG, "IOException: " + e.message)
         }
 
         finishThisActivity(ERROR)
@@ -158,25 +175,23 @@ class AuthActivity : AppCompatActivity() {
             val jsonData: String = response.body.toString()
 
             if (debug) {
-              Log.d(TAG, "response is: $jsonData");
+              Log.d(TAG, "response is: $jsonData")
             }
 
             try {
-              val jsonObject: JSONObject = JSONObject(jsonData);
-              val authToken: String = jsonObject.getString("access_token");
+              val jsonObject: JSONObject = JSONObject(jsonData)
+              val authToken: String = jsonObject.getString("access_token")
 
-              storeToSharedPreference(authToken);
+              storeToSharedPreference(authToken)
 
               if (debug) {
-                Log.d(TAG, "token is: $authToken");
+                Log.d(TAG, "token is: $authToken")
               }
-
             } catch (exp: JSONException) {
               if (debug) {
                 Log.d(TAG, "json exception: " + exp.message)
               }
             }
-
           } else {
             if (debug) {
               Log.d(TAG, "onResponse: not success: " + response.message)
@@ -192,18 +207,18 @@ class AuthActivity : AppCompatActivity() {
   // Allow web view to go back a page.
   override fun onBackPressed() {
     if (webView!!.canGoBack()) {
-      webView!!.goBack();
+      webView!!.goBack()
     } else {
-      super.onBackPressed();
+      super.onBackPressed()
     }
   }
 
   fun storeToSharedPreference(authToken: String) {
-    val prefs: SharedPreferences = getSharedPreferences("github_prefs", MODE_PRIVATE);
-    val edit: SharedPreferences.Editor = prefs.edit();
+    val prefs: SharedPreferences = getSharedPreferences("github_prefs", MODE_PRIVATE)
+    val edit: SharedPreferences.Editor = prefs.edit()
 
-    edit.putString("oauth_token", authToken);
-    edit.apply();
+    edit.putString("oauth_token", authToken)
+    edit.apply()
   }
 
   /**
@@ -212,8 +227,8 @@ class AuthActivity : AppCompatActivity() {
    * @param resultCode one of the constants from the class ResultCode
    */
   fun finishThisActivity(resultCode: Int) {
-    setResult(resultCode);
-    finish();
+    setResult(resultCode)
+    finish()
   }
 
   /**

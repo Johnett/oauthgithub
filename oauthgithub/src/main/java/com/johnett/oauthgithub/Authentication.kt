@@ -1,9 +1,23 @@
+/**
+ * Designed and developed by Johnett Mathew (@Johnett)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.johnett.oauthgithub
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-
 
 class Authentication {
   private var clientId: String? = null
@@ -43,7 +57,6 @@ class Authentication {
   fun Builder(): Authentication? {
     return Authentication()
   }
-
 
   fun withContext(activity: Activity?): Authentication? {
     setAppContext(activity)
@@ -100,7 +113,6 @@ class Authentication {
     this.clientSecret = clientSecret
   }
 
-
   fun getClientId(): String? {
     return clientId
   }
@@ -136,7 +148,7 @@ class Authentication {
     val githubId = getClientId()
     val githubSecret = getClientSecret()
     val hasScope = scopeList != null && scopeList.size > 0
-    val intent = Intent(getAppContext(), OauthActivity::class.java)
+    val intent = Intent(getAppContext(), AuthActivity::class.java)
     intent.putExtra("id", githubId)
     intent.putExtra("debug", isDebug())
     intent.putExtra("secret", githubSecret)
