@@ -15,15 +15,39 @@
  */
 package com.johnett.oauthgithubsample
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.johnett.oauthgithub.Authentication
 
 class MainActivity : AppCompatActivity() {
   private val tokenView by lazy { findViewById<TextView>(R.id.tvToken) }
+  private val loginButton by lazy { findViewById<Button>(R.id.btLogin) }
+  val GITHUB_ID: String = BuildConfig.GITHUB_ID
+  val GITHUB_SECRET: String = BuildConfig.GITHUB_SECRET
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+
+    loginButton.onClickDebounced {
+      Authentication()
+        .Builder()
+        ?.withClientId(GITHUB_ID)
+        ?.withClientSecret(GITHUB_SECRET)
+        ?.withContext(this)
+        ?.packageName("com.johnett.oauthgithubsample")
+        ?.nextActivity("com.johnett.oauthgithubsample.UserActivity")
+        ?.debug(true)
+        ?.execute()
+    }
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    Log.d("test_case_running", "$requestCode /$resultCode")
+    super.onActivityResult(requestCode, resultCode, data)
   }
 }

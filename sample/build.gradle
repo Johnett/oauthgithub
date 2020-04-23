@@ -1,11 +1,28 @@
 ext.module_name = "oauthgithubsample"
 
 apply from: rootProject.file("gradle/android_application_config.gradle")
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        all {
+            buildConfigField 'String', 'GITHUB_ID', '"fc6400e19d7e3a8f73ee"'
+            buildConfigField 'String', 'GITHUB_SECRET', '"836aefe96aa1118a149a0104980448ba5f962c93"'
+        }
+    }
+}
 
 dependencies {
-  implementation project(":oauthgithub")
+    implementation project(":oauthgithub")
 
-  implementation deps.androidx.app_compat
-  implementation deps.androidx.constraint_layout
-  implementation deps.kotlin.stdlib8
+    implementation deps.androidx.app_compat
+    implementation deps.androidx.constraint_layout
+    implementation deps.kotlin.stdlib8
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 }

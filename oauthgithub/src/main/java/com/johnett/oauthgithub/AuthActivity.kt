@@ -164,7 +164,7 @@ class AuthActivity : AppCompatActivity() {
           Log.d(TAG, "IOException: " + e.message)
         }
 
-        finishThisActivity(ERROR)
+        finishThisActivity(ERROR, "")
       }
 
       override fun onResponse(call: Call, response: Response) {
@@ -172,33 +172,34 @@ class AuthActivity : AppCompatActivity() {
           if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
           if (response.isSuccessful) {
-            val jsonData: String = response.body.toString()
+            val jsonData: String = response.body!!.string()
 
             if (debug) {
               Log.d(TAG, "response is: $jsonData")
             }
 
             try {
-              val jsonObject: JSONObject = JSONObject(jsonData)
-              val authToken: String = jsonObject.getString("access_token")
+              Log.d("this_is_a_test", jsonData)
+              val jsonObject = JSONObject(jsonData)
+              val authToken = jsonObject.getString("access_token")
 
               storeToSharedPreference(authToken)
-
+              finishThisActivity(SUCCESS, authToken)
               if (debug) {
                 Log.d(TAG, "token is: $authToken")
               }
             } catch (exp: JSONException) {
               if (debug) {
                 Log.d(TAG, "json exception: " + exp.message)
+                finishThisActivity(ERROR, "")
               }
             }
           } else {
             if (debug) {
               Log.d(TAG, "onResponse: not success: " + response.message)
+              finishThisActivity(ERROR, "")
             }
           }
-
-          finishThisActivity(SUCCESS)
         }
       }
     })
@@ -226,8 +227,14 @@ class AuthActivity : AppCompatActivity() {
    *
    * @param resultCode one of the constants from the class ResultCode
    */
-  fun finishThisActivity(resultCode: Int) {
+  fun finishThisActivity(resultCode: Int, token: String) {
     setResult(resultCode)
+    if (resultCode == 1) {
+      val intent = Intent()
+      intent.setClassName(PACKAGE, ACTIVITY_NAME)
+      intent.putExtra("token", token)
+      startActivity(intent)
+    }
     finish()
   }
 

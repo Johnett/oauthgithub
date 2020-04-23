@@ -19,9 +19,21 @@
       android:id="@+id/tvToken"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="28dp"
-      tools:text="Token"
+      android:layout_marginBottom="24dp"
       app:layout_constraintBottom_toTopOf="@+id/middle_y"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent" />
+      app:layout_constraintStart_toStartOf="parent"
+      tools:text="Token" />
+
+  <Button
+      android:id="@+id/btLogin"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:text="@string/login_button_text"
+      android:textAllCaps="false"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.498"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/middle_y" />
 </androidx.constraintlayout.widget.ConstraintLayout>
