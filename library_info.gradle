@@ -3,9 +3,9 @@ ext.library = [
     compile_sdk: 29,
 
     publish_group: "com.johnett",
-    publish_version: "0.1.0",
+    publish_version: "1.0",
     publish_version_code: 1,
 
-    description: "oauth authentication for github made with kotlin",
+    description: "Android library that helps to integrate Github authentication in your android application.",
     website: "https://github.com/Johnett/oauthgithub"
 ]

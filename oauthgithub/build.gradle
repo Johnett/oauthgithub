@@ -1,4 +1,4 @@
-ext.module_name = "librarytemplate"
+ext.module_name = "oauthgithub"
 
 apply from: rootProject.file("gradle/android_library_config.gradle")
 apply plugin: 'kotlin-android'
