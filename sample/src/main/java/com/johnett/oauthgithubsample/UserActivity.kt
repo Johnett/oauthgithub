@@ -15,9 +15,11 @@
  */
 package com.johnett.oauthgithubsample
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.johnett.oauthgithub.AuthActivity
 
 class UserActivity : AppCompatActivity() {
   private val tokenView by lazy { findViewById<TextView>(R.id.tokenView) }
@@ -25,8 +27,8 @@ class UserActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_user)
 
-    val bundle: Bundle? = intent.extras
-    val message = bundle!!.getString("token")
-    tokenView.text = message
+    val sp = getSharedPreferences("prefs", 0)
+    val token = sp.getString("token", "none")
+    tokenView.text = token
   }
 }

@@ -45,9 +45,4 @@ class MainActivity : AppCompatActivity() {
         ?.execute()
     }
   }
-
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    Log.d("test_case_running", "$requestCode /$resultCode")
-    super.onActivityResult(requestCode, resultCode, data)
-  }
 }

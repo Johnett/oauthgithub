@@ -16,6 +16,7 @@
 package com.johnett.oauthgithub
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
@@ -164,7 +165,7 @@ class AuthActivity : AppCompatActivity() {
           Log.d(TAG, "IOException: " + e.message)
         }
 
-        finishThisActivity(ERROR, "")
+        finishThisActivity(ERROR)
       }
 
       override fun onResponse(call: Call, response: Response) {
@@ -184,20 +185,20 @@ class AuthActivity : AppCompatActivity() {
               val authToken = jsonObject.getString("access_token")
 
               storeToSharedPreference(authToken)
-              finishThisActivity(SUCCESS, authToken)
+              finishThisActivity(SUCCESS)
               if (debug) {
                 Log.d(TAG, "token is: $authToken")
               }
             } catch (exp: JSONException) {
               if (debug) {
                 Log.d(TAG, "json exception: " + exp.message)
-                finishThisActivity(ERROR, "")
+                finishThisActivity(ERROR)
               }
             }
           } else {
             if (debug) {
               Log.d(TAG, "onResponse: not success: " + response.message)
-              finishThisActivity(ERROR, "")
+              finishThisActivity(ERROR)
             }
           }
         }
@@ -215,10 +216,10 @@ class AuthActivity : AppCompatActivity() {
   }
 
   fun storeToSharedPreference(authToken: String) {
-    val prefs: SharedPreferences = getSharedPreferences("github_prefs", MODE_PRIVATE)
+    val prefs: SharedPreferences = getSharedPreferences("prefs", MODE_PRIVATE)
     val edit: SharedPreferences.Editor = prefs.edit()
 
-    edit.putString("oauth_token", authToken)
+    edit.putString("token", authToken)
     edit.apply()
   }
 
@@ -227,12 +228,11 @@ class AuthActivity : AppCompatActivity() {
    *
    * @param resultCode one of the constants from the class ResultCode
    */
-  fun finishThisActivity(resultCode: Int, token: String) {
+  fun finishThisActivity(resultCode: Int) {
     setResult(resultCode)
     if (resultCode == 1) {
       val intent = Intent()
       intent.setClassName(PACKAGE, ACTIVITY_NAME)
-      intent.putExtra("token", token)
       startActivity(intent)
     }
     finish()
