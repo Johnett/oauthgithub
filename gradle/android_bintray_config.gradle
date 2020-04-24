@@ -15,7 +15,7 @@ task checkBintrayConfig {
               "BINTRAY_API_KEY (\"$BINTRAY_API_KEY\") are not set in your environment variables.")
       throw new TaskExecutionException(it, cause)
     }
-    if (library.publish_group == "com.afollestad" &&
+    if (library.publish_group == "com.afollestad" ||
         module_name == "librarytemplate") {
       def cause = new Exception(
           "The publish_group is com.afollestad and the module_name is librarytemplate. You should " +
